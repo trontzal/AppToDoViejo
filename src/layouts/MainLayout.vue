@@ -1,144 +1,110 @@
-  <template>
-    <q-layout view="lHh Lpr lFf">
-      <q-header elevated>
-        <q-toolbar>
-          <q-btn
-            flat
-            dense
-            round
-            icon="menu"
-            aria-label="Menu"
-            @click="toggleLeftDrawer"
-          />
+<template>
+  <q-layout view="hHh lpR fFf">
+    <q-header elevated>
+      <q-toolbar>
+        <q-toolbar-title class="absolute-center">
+          To Do App
+        </q-toolbar-title>
+      </q-toolbar>
+    </q-header>
 
-          <q-toolbar-title>
-            Quasar App
-          </q-toolbar-title>
+    <q-drawer
+      v-model="leftDrawerOpen"
+      show-if-above
+      bordered
+      :width="200"
+      :breakpoint="767"
+      class="bg-primary"
+    >
+      <q-list dark>
+        <q-item-label
+          header
+        >
+          Navigation
+        </q-item-label>
 
-          <div>Quasar v{{ $q.version }}</div>
-        </q-toolbar>
-      </q-header>
+        <EssentialLink
+          v-for="link in essentialLinks"
+          :key="link.title"
+          v-bind="link"
+        />
+      </q-list>
+    </q-drawer>
 
-      <q-drawer
-        v-model="leftDrawerOpen"
-        show-if-above
-        bordered
-      >
-        <q-list>
-          <q-item-label
-            header
-          >
-            Navigation
-          </q-item-label>
+    <q-footer class="bg-grey-8 text-white">
+      <q-tabs class="text-teal">
+        <q-route-tab
+          v-for="link in essentialLinks"
+          :key="link.title"
+          :icon="link.icon"
+          :label="link.title"
+          :to="link.to"
+          exact/>
+      </q-tabs>
+    </q-footer>
 
-          <EssentialLink
-            v-for="link in essentialLinks"
-            :key="link.title"
-            v-bind="link"
-          />
-        </q-list>
-      </q-drawer>
+    <q-page-container>
+      <router-view />
+    </q-page-container>
+  </q-layout>
+</template>
 
-      <q-footer  class="bg-grey-8 text-white">
-          <div class="q-pa-md">
-            <div class="q-gutter-y-md" style="max-width: 600px">
-              <q-tabs
-                v-model="tab"
-                class="text-teal"
-              >
-                <q-tab name="mails" icon="mail" label="Mails" />
-                <q-tab name="alarms" icon="alarm" label="Alarms" />
-                <q-tab name="movies" icon="movie" label="Movies" />
-              </q-tabs>
+<script>
+import { defineComponent, ref } from 'vue'
+import EssentialLink from 'components/EssentialLink.vue'
 
-              <q-tabs
-                v-model="tab"
-                inline-label
-                class="bg-purple text-white shadow-2"
-              >
-                <q-tab name="mails" icon="mail" label="Mails" />
-                <q-tab name="alarms" icon="alarm" label="Alarms" />
-                <q-tab name="movies" icon="movie" label="Movies" />
-              </q-tabs>
+const linksList = [
+  {
+    to:"/",
+    title: 'ToDo',
+    caption: 'Descripcion',
+    icon: 'list'
+  },
+  {
+    to:"/settings",
+    title: 'Settings',
+    caption: 'Descripcion',
+    icon: 'settings'
+  },
+  {
+    to:"/about",
+    title: 'About',
+    caption: 'Descripcion',
+    icon: 'man'
+  }
 
-              <q-tabs
-                v-model="tab"
-                no-caps
-                class="bg-orange text-white shadow-2"
-              >
-                <q-tab name="mails" label="Mails" />
-                <q-tab name="alarms" label="Alarms" />
-                <q-tab name="movies" label="Movies" />
-              </q-tabs>
+]
 
-              <q-tabs
-                v-model="tab"
-                class="bg-teal text-yellow shadow-2"
-              >
-                <q-tab name="mails" icon="mail" />
-                <q-tab name="alarms" icon="alarm" />
-                <q-tab name="movies" icon="movie" />
-              </q-tabs>
+export default defineComponent({
+  name: 'MainLayout',
 
-              <q-tabs
-                v-model="tab"
-                inline-label
-                class="bg-primary text-white shadow-2"
-              >
-                <q-tab name="mails" icon="mail" label="Mails" />
-                <q-tab name="alarms" icon="alarm" label="Alarms" />
-                <q-tab name="movies" icon="movie" label="Movies" />
-                <q-tab name="photos" icon="photo" label="Photos" />
-                <q-tab name="videos" icon="slow_motion_video" label="Videos" />
-                <q-tab name="addressbook" icon="people" label="Address Book" />
-              </q-tabs>
-            </div>
-          </div>
-        </q-footer>
+  components: {
+    EssentialLink
+  },
 
-      <q-page-container>
-        <router-view />
-      </q-page-container>
-    </q-layout>
-  </template>
+  setup () {
+    const leftDrawerOpen = ref(false)
 
-  <script>
-  import { defineComponent, ref } from 'vue'
-  import EssentialLink from 'components/EssentialLink.vue'
-
-  const linksList = [
-    {
-      link:"#",
-      title: 'ToDo',
-      caption: 'Descripcion',
-      icon: 'list'
-    },
-    {
-      link:"#settings",
-      title: 'Settings',
-      caption: 'Descripcion',
-      icon: 'settings'
-    }
-
-  ]
-
-  export default defineComponent({
-    name: 'MainLayout',
-
-    components: {
-      EssentialLink
-    },
-
-    setup () {
-      const leftDrawerOpen = ref(false)
-
-      return {
-        essentialLinks: linksList,
-        leftDrawerOpen,
-        toggleLeftDrawer () {
-          leftDrawerOpen.value = !leftDrawerOpen.value
-        }
+    return {
+      essentialLinks: linksList,
+      leftDrawerOpen,
+      toggleLeftDrawer () {
+        leftDrawerOpen.value = !leftDrawerOpen.value
       }
     }
-  })
-  </script>
+  }
+})
+</script>
+
+<style lang="scss">
+.q-drawer {
+  .q-router-link--exact-active{
+  color: white !important;
+  }
+}
+  @media  screen and (min-width:768px) {
+      .q-footer{
+        display: none;
+      }
+  }
+</style>
