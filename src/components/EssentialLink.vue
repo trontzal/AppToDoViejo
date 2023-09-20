@@ -2,8 +2,8 @@
   <q-item
     clickable
     tag="a"
-    target="_blank"
     :href="link"
+    v-bind:class="{ 'selected-link': isActiveRoute }"
   >
     <q-item-section
       v-if="icon"
@@ -21,6 +21,7 @@
 
 <script>
 import { defineComponent } from 'vue'
+import { useRoute } from 'vue-router'; // Importa useRoute desde vue-router
 
 export default defineComponent({
   name: 'EssentialLink',
@@ -44,6 +45,18 @@ export default defineComponent({
       type: String,
       default: ''
     }
+  },
+  computed: {
+    isActiveRoute() {
+      const route = useRoute()
+      return this.title === route.name
+    }
   }
 })
 </script>
+
+<style>
+.selected-link {
+  color: blue;
+}
+</style>
