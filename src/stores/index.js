@@ -1,6 +1,7 @@
-import { store } from 'quasar/wrappers'
-import { createPinia } from 'pinia'
+import Vue from  'vue'
+import Vuex from 'vuex'
 
+import tasks from './store-tasks'
 /*
  * If not building with SSR mode, you can
  * directly export the Store instantiation;
@@ -10,11 +11,14 @@ import { createPinia } from 'pinia'
  * with the Store instance.
  */
 
-export default store((/* { ssrContext } */) => {
-  const pinia = createPinia()
-
-  // You can add Pinia plugins here
-  // pinia.use(SomePiniaPlugin)
-
-  return pinia
-})
+export default function(/* { ssrContext } */){
+  const Store = new Vuex.Store({
+    modules:{
+      tasks
+    },
+    strict: process.env.DEV
+  })
+  return{
+    Store
+  }
+}
